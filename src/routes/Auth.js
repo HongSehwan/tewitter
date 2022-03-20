@@ -4,18 +4,19 @@ const Auth = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [newAccount, setNewAccount] = useState(false)
-  const onChange = (event) => {
-    const {
-      target: { name, value },
-    } = event
-    if (name === 'email') {
-      setEmail(value)
-    } else if (name === 'password') {
-      setPassword(value)
-    }
-  }
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault()
+    try {
+      let data
+      if (newAccount) {
+        data = await authService.createUserWithEmailAndPassword(email, password)
+      } else {
+        data = await authService.signInWithEmailAndPassword(email, password)
+      }
+      console.log(data)
+    } catch (error) {
+      console.log(error)
+    }
   }
   return (
     <div>
