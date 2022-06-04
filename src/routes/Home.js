@@ -1,26 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { dbService } from "fbase";
 
-const Home = () => {
-    const [nweets, setNweets] = useState([]);
-    const getNweets = async () => {
-        const dbNweets = await dbService.collection("nweets").get();
-        dbNweets.forEach((document) => {
-            const nweetObject = {
-                ...document.data(),
-                id: document.id,
-            };
-            setNweets((prev) => [nweetObject, ...prev]);
-        });
-    };
+const Home = ({ userObj }) => {
+    const [teweet, setTeweet] = useState("");
+    const [teweets, setTeweets] = useState([]);
     useEffect(() => {
-        getNweets();
+        dbService.collection("teweets").onSnapshot((snapshot) => {
+            const teweetArray = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            setTeweets(teweetArray);
+        });
     }, []);
     const onSubmit = async (event) => {
         event.preventDefault();
         await dbService.collection("teweets").add({
-            teweet,
+            text: teweet,
             createdAt: Date.now(),
+            creatorId: userObj.uid,
         });
         setTeweet("");
     };
@@ -37,9 +35,9 @@ const Home = () => {
                 <input type="submit" value="teweet" />
             </form>
             <div>
-                {nweets.map((nweet) => (
-                    <div key={nweet.id}>
-                        <h4>{nweet.nweet}</h4>
+                {teweets.map((teweet) => (
+                    <div key={teweet.id}>
+                        <h4>{teweet.text}</h4>
                     </div>
                 ))}
             </div>
