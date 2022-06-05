@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { dbService } from "fbase";
+import Teweet from "components/Teweet";
 
 const Home = ({ userObj }) => {
     const [teweet, setTeweet] = useState("");
@@ -36,9 +37,7 @@ const Home = ({ userObj }) => {
             </form>
             <div>
                 {teweets.map((teweet) => (
-                    <div key={teweet.id}>
-                        <h4>{teweet.text}</h4>
-                    </div>
+                    <Teweet key={teweet.id} teweetObj={teweet} isOwner={teweet.creatorId === userObj.uid} />
                 ))}
             </div>
         </div>
