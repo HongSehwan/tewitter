@@ -13,12 +13,7 @@ function App() {
             setInit(true);
         });
     }, []);
-    return (
-        <>
-            {init ? <AppRouter isLoggedIn={Boolean(userObj)} userObj={userObj} /> : "Initializing..."}
-            <footer>&copy; {new Date().getFullYear()} Nwitter</footer>
-        </>
-    );
+    return <>{init ? <AppRouter isLoggedIn={Boolean(userObj)} userObj={userObj} /> : "Initializing..."}</>;
 }
 
 export default App;
